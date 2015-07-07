@@ -18,6 +18,31 @@ var root = __dirname,
 /** Configure express app **/
 app.use( express.static( root + "/public" ) );
 
+/** Creating some express routes (get/post) **/
+app.get( "/hello", function helloCallback ( req, res ) {
+    res.send("You there already?");
+});
+
+app.get("/back", function backCallback( req, res ) {
+    res.send("We are back home!");
+});
+
+/**
+ * Serving JSON api to be consumed by other applications
+ */
+app.get("/someJSON", function  someJSONCallback( req, res ) {
+    res.json({
+        "one": {
+            "so": "cool"
+        },
+        "two": "super cool",
+        "three": ["reaching", "the", "end"],
+        "four": "buckle my shoes"
+    });
+});
+
+
+
 /** Start server on port 3000 **/
 app.listen( port, function listenCallback() {
     console.log("Express server listening on port " + port);

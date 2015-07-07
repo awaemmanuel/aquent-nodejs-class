@@ -4,7 +4,8 @@
 **/
 
 /** Require modules **/
-var express = require("express");
+var express = require("express"),
+    ejs = require("ejs");
 
 
 /** Initialize Express app object **/
@@ -16,11 +17,14 @@ var root = __dirname,
     port = 3000;
 
 /** Configure express app **/
-app.use( express.static( root + "/public" ) );
+app.use( express.static( root + "/public" ) ),
+app.set( "views", root + "/views" ),
+app.set( "view engine", "ejs" );
 
 /** Creating some express routes (get/post) **/
-app.get( "/hello", function helloCallback ( req, res ) {
-    res.send("You there already?");
+app.get( "/ejs_test", function ejs_testCallback ( req, res ) {
+    //res.send("You there already?");
+    res.render( "test" );
 });
 
 app.get("/back", function backCallback( req, res ) {

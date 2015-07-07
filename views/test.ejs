@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>First EJS template view</title>
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
+</head>
+<body>
+<%
+    var title = "My Dynamic page";
+
+    // names array
+    var names = ["Jason", "Emmanuel", "Steve", "Tamara"];
+
+    var random = Math.floor(Math.random() * names.length);
+
+    var name = names[random];
+
+%>
+
+<h1><%- title %></h1>
+<p>Hello, my name <strong> <%= name %></strong> </p>
+
+<p>Some conditional checks! </p>
+<%
+    if (name.length >= 6) { %>
+        <span> My name has 6 or more characters </span>
+<%  } else { %>
+        <span>My name has less than 6 characters </span>
+<% } %>
+
+</body>
+</html>

@@ -5,7 +5,8 @@
 
 /** Require modules **/
 var express = require("express"),
-    ejs = require("ejs");
+    ejs = require("ejs"),
+    jade = require("jade");
 
 
 /** Initialize Express app object **/
@@ -19,10 +20,10 @@ var root = __dirname,
 /** Configure express app **/
 app.use( express.static( root + "/public" ) ),
 app.set( "views", root + "/views" ),
-app.set( "view engine", "ejs" );
+app.set( "view engine", "jade" );
 
 /** Creating some express routes (get/post) **/
-app.get( "/ejs_test", function ejs_testCallback ( req, res ) {
+app.get( "/jade_test", function jade_testCallback ( req, res ) {
     //res.send("You there already?");
     res.render( "test" );
 });

@@ -1,0 +1,28 @@
+doctype strict
+html
+    head
+        title My Jade Version
+
+        body
+
+            - var title = "AceOneWorld";
+
+            // names array
+            - var names = ["Jason", "Emmanuel", "Steve", "Tamara"];
+
+            - var random = Math.floor(Math.random() * names.length);
+
+            - var name = names[random];
+
+            h1 #{ title }
+
+            p Hello, my name is
+                strong  #{ name }
+
+            p Some conditional checks!
+
+             if (name.length >= 6)
+                span  My name has 6 or more characters
+             else
+                span  My name has less than 6 characters
+

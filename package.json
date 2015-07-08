@@ -1,0 +1,16 @@
+{
+	"name": "nodeIntro",
+	"version": "0.0.2",
+	"description": "",
+	"author": {
+		"name" : "Emmanuel Awa",
+		"email": "eawa@brandeis.edu",
+		"homepage": "https://github.com/awaemmanuel/aquent-nodejs-class"
+	},
+
+	"dependencies": {
+		"express": "*",
+        "jade": "*"
+
+	}
+}

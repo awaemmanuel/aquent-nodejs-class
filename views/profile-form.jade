@@ -34,6 +34,12 @@ html
 
                             div( class = "clearfix")
 
+                        - // bio
+                        div( class = "form-group" )
+                            label( for = "bioField" )
+
+                            textarea( class = "form-control input-lg", rows = "3", placeholder = "What's your story?", name = "bioFieldId" )
+
                         - // edit profile form
                         form( action = "/settings/profile", method = "post" )
 

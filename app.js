@@ -6,11 +6,13 @@
 /** Require modules **/
 var express = require("express"),
     ejs = require("ejs"),
-    jade = require("jade");
+    jade = require("jade"),
+    bodyParser = require("body-parser");
 
 
 /** Initialize Express app object **/
 var app = new express();
+
 
 
 // Server will be browsed at http://localhost:3000
@@ -18,9 +20,18 @@ var root = __dirname,
     port = 3000;
 
 /** Configure express app **/
-app.use( express.static( root + "/public" ) ),
+app.use( express.static( root + "/public" ) );
+
+
 app.set( "views", root + "/views" ),
-app.set( "view engine", "jade" );
+    app.set( "view engine", "jade" );
+
+/** Add a middleware to return the data from the pages when requests are made
+ *  - It looks for data encoded in the url when posts are made.
+ *  - Variables will be available to use through a body object.
+ **/
+app.use(bodyParser.urlencoded( { extended : true }));
+
 
 /** Creating some express routes (get/post) **/
 app.get( "/settings/profile", function profile_editCallback ( req, res ) {
@@ -29,10 +40,25 @@ app.get( "/settings/profile", function profile_editCallback ( req, res ) {
 });
 
 app.post( "/settings/profile", function postProfileCb ( req, res ) {
+
     // this callback is fired after a POST is sent to the server
     console.log("POST RECEIVED");
+
+    // Error handling from server response.ss
+    if (!req.body) {
+
+        return res.sendStatus(400)
+    }
+
+
+    // report post data to console
+    console.log( req.body );
+
+    // reply to browser that something has happened and close the loop
     res.json({
-        "status": "POST RECEIVED"
+        "firstName": req.body.firstNameField,
+        "lastName": req.body.lastNameField,
+        "bio": req.body.bioField
     })
 });
 

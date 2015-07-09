@@ -8,7 +8,8 @@ var express = require("express"),
     ejs = require("ejs"),
     jade = require("jade"),
     bodyParser = require("body-parser"),
-    fs = require("fs");
+    fs = require("fs"),
+    multipart = require("connect-multiparty");
 
 
 /** Initialize Express app object **/
@@ -27,12 +28,21 @@ app.use( express.static( root + "/public" ) );
 app.set( "views", root + "/views" ),
     app.set( "view engine", "jade" );
 
+
+// ADD Middlewares
+
 /** Add a middleware to return the data from the pages when requests are made
  *  - It looks for data encoded in the url when posts are made.
  *  - Variables will be available to use through a body object.
  **/
 app.use(bodyParser.urlencoded( { extended : true }));
 
+
+/**
+ * Add a middleware for Multiplart files upload
+ * - Method receives an options object, and will be using app_root_dir/tmp where we'll upload from
+ */
+app.use( multipart({ uploadDir: root + "/tmp" }) );
 
 /** Creating some express routes (get/post) **/
 
@@ -82,10 +92,29 @@ app.post( "/settings/profile", function postProfileCb ( req, res ) {
     // this callback is fired after a POST is sent to the server
     console.log("POST RECEIVED");
 
-    // Error handling from server response.ss
+    // Error handling from server response
     if (!req.body) {
 
         return res.sendStatus(400)
+    }
+
+    var data = req.body;
+
+    // Report to console
+    console.log( "Fields Received", data );
+
+    // =================================
+
+    // You can inspect the req and res objects using console
+    // To see what they contain
+
+    console.log ("=====> Files: ", req.files );
+    // =================================
+
+    // GET file
+
+    if ( req.files.photoField != undefined ) {
+
     }
 
     // Write JSON with POST data using core node methods

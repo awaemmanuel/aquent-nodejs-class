@@ -18,13 +18,24 @@ html
 
                     div( class = "panel-body" )
 
-                        - // edit profile form
-                        form( action = "/settings/profile", method = "post" )
+                        - // edit profile form *** Change form element to accept multipart encoded uploads
+
+                        form( action = "/settings/profile",
+                        method = "post",
+                        enctype = "multipart/form-data")
+
+                            - // photo field
+                            div( class = "form-group")
+                                div( class = "photoField" )
+                                    label( for = "photoField" ) Photo
+                                    input( type = "file", class = "form-control input-lg", name = "photoField" )
+
                             - // name fields
                             div( class = "form-group")
                                 div( class = "nameField pull-left" )
                                     label( for = "firstNameField" ) First Name
                                     input( type = "text", class = "form-control input-lg", placeholder = "First Name", name = "firstNameField" )
+
                                 div( class = "nameField pull-right" )
                                     label( for = "lastNameField" ) Last Name
                                     input( type = "text", class = "form-control input-lg", placeholder = "Last Name", name = "lastNameField" )

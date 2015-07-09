@@ -12,7 +12,9 @@
 	                "express": "*",
                         "jade": "*",
                         "ejs": "*",
-                        "connect": "*"
+                        "connect": "*",
+	  					"multipart": "*",
+	  					"connect-multiparty": "*"
 
 	}
 }

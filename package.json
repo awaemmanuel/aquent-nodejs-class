@@ -10,7 +10,8 @@
 
 	"dependencies": {
 		"express": "*",
-        "jade": "*"
+        "jade": "*",
+        "ejs": "*"
 
 	}
 }

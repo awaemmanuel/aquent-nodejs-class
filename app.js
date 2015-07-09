@@ -23,9 +23,17 @@ app.set( "views", root + "/views" ),
 app.set( "view engine", "jade" );
 
 /** Creating some express routes (get/post) **/
-app.get( "/jade_test", function jade_testCallback ( req, res ) {
+app.get( "/settings/profile", function profile_editCallback ( req, res ) {
     //res.send("You there already?");
-    res.render( "test" );
+    res.render( "profile-form" );
+});
+
+app.post( "/settings/profile", function postProfileCb ( req, res ) {
+    // this callback is fired after a POST is sent to the server
+    console.log("POST RECEIVED");
+    res.json({
+        "status": "POST RECEIVED"
+    })
 });
 
 app.get("/back", function backCallback( req, res ) {

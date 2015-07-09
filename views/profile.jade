@@ -1,0 +1,22 @@
+doctype strict
+html
+    html
+        title Profile
+        link( rel="styleSheet",
+        type = "text/css",
+        href = "/css/styles.css")
+
+        body
+
+            div( class = "container width700" )
+
+                - // Adds a big splash on the screen
+
+                div( class = "jumbotron text-center" )
+
+                    div #{ firstname } #{lastname }
+
+                    div #{ bio }
+
+                    div
+                        a( href = "settings/profile" ) Edit Profile

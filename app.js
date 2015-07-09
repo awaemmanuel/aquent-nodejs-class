@@ -7,7 +7,8 @@
 var express = require("express"),
     ejs = require("ejs"),
     jade = require("jade"),
-    bodyParser = require("body-parser");
+    bodyParser = require("body-parser"),
+    fs = require("fs");
 
 
 /** Initialize Express app object **/
@@ -34,11 +35,48 @@ app.use(bodyParser.urlencoded( { extended : true }));
 
 
 /** Creating some express routes (get/post) **/
+
+// GET edit profile
 app.get( "/settings/profile", function profile_editCallback ( req, res ) {
     //res.send("You there already?");
     res.render( "profile-form" );
 });
 
+// GET profile page
+/** Creating a redirect page after data is submitted to server **/
+app.get( "/profile", function profile_pageCallback ( req, res ) {
+
+
+    // Read file ** Asynchronously ** from data file back to the profile page
+    fs.readFile("data.json", function readFileCallback ( err, data ) {
+        if ( err )  {
+
+            res.json({
+                err: true,
+                msg: err.msg
+            });
+            return console.log( err );
+        }
+
+        // No error, continue process
+
+        // Convert JSON string to JavaScript object using Chrome V8 processing for NODE.
+        var profileData = JSON.parse( data );
+
+        console.log("Data read from file: ", profileData);
+
+        res.render( "profile", {
+            firstname: profileData.firstNameField,
+            lastname: profileData.lastNameField,
+            bio: profileData.bioField
+        });
+    });
+
+});
+
+
+
+// POST edit profile page
 app.post( "/settings/profile", function postProfileCb ( req, res ) {
 
     // this callback is fired after a POST is sent to the server
@@ -50,16 +88,36 @@ app.post( "/settings/profile", function postProfileCb ( req, res ) {
         return res.sendStatus(400)
     }
 
+    // Write JSON with POST data using core node methods
+    // Asynchronously write data to a file
 
-    // report post data to console
-    console.log( req.body );
+    fs.writeFile( "data.json", JSON.stringify( req.body, null, 2 ),    function writeCb( err ) {
+        // reply to browser that something has happened and close the loop
 
-    // reply to browser that something has happened and close the loop
-    res.json({
-        "firstName": req.body.firstNameField,
-        "lastName": req.body.lastNameField,
-        "bio": req.body.bioField
-    })
+        // Error handling
+        if ( err ) {
+            res.json( {
+                err: true, msg: err.msg
+            });
+
+            return console.log ( err );
+        }
+
+        // Report success to console
+        console.log ( "Post Data Saved", req.body );
+
+        // Reply to browser with a redirect directive
+        res.redirect("/profile");
+
+        //
+        //return res.json({
+        //    "firstName": req.body.firstNameField,
+        //    "lastName": req.body.lastNameField,
+        //    "bio": req.body.bioField
+        //}); // end writeCb
+    }); // end app.post
+
+
 });
 
 app.get("/back", function backCallback( req, res ) {

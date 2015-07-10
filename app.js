@@ -78,7 +78,8 @@ app.get( "/profile", function profile_pageCallback ( req, res ) {
         res.render( "profile", {
             firstname: profileData.firstNameField,
             lastname: profileData.lastNameField,
-            bio: profileData.bioField
+            bio: profileData.bioField,
+            photo: profileData.photoPath
         });
     });
 
@@ -114,6 +115,56 @@ app.post( "/settings/profile", function postProfileCb ( req, res ) {
     // GET file
 
     if ( req.files.photoField != undefined ) {
+
+      // Express (Connect) Multipart uploads automatically to your tmp folder
+      // This can be a securty issue, so you should be sure to handle each upload properly
+
+      // Since we only have one POST route here, we should be relatively safe
+      // as we will now process the image we are expecting. It won't be perfect .
+
+      // Someone could bypass this handling by posting a file from another field name
+
+      var filePath = req.files.photoField.path,
+        fileName = req.files.photoField.originalFilename;
+
+      // Report to console for testing
+      console.log( "Image file received: ", filePath );
+
+      // Move the file from the tmp directory
+      // to our web accessible directory, with the original filename.
+      var finalPath = root + "/public/images/" + fileName;
+
+      // Core node method
+
+      // NOTE
+      // Always use the asynchronous methods for production
+      // code. For this case here, the synchronous one is very okay.
+
+      // This will move our image from tmp directory to images public dir
+      console.log( filePath );
+      console.log( finalPath );
+      console.log ("FILENAME: ", fileName);
+
+
+
+      fs.renameSync( filePath, finalPath);
+
+
+      // Alter the data object to contain the photo path
+
+      data.photoPath = "images/" + fileName;
+
+      // clean up after yourself in the tmp folder
+      fs.unlink( filePath, function clean_upCallback (err) {
+        if ( err ) {
+          res.json({
+            err: true, msg: err.msg
+          });
+
+          return console.log( err );
+        }
+        console.log('successfully deleted ', req.files.photoField.path);
+      });
 
     }
 

@@ -14,7 +14,8 @@
                         "ejs": "*",
                         "connect": "*",
 	  					"multipart": "*",
-	  					"connect-multiparty": "*"
+	  					"connect-multiparty": "*",
+	  					"body-parser": "*"
 
 	}
 }

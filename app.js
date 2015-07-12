@@ -12,6 +12,7 @@ var express = require("express"),
     multipart = require("connect-multiparty");
 
 
+
 /** Initialize Express app object **/
 var app = new express();
 
@@ -49,7 +50,76 @@ app.use( multipart({ uploadDir: root + "/tmp" }) );
 // GET edit profile
 app.get( "/settings/profile", function profile_editCallback ( req, res ) {
     //res.send("You there already?");
-    res.render( "profile-form" );
+
+    // this callback is fired after a GET is received from the server
+    // when the user clicks the edit button.
+    // we have to receive the information from the json file on server
+    console.log("GET RECEIVED");
+
+    // Error handling from server response
+    if (!req.body) {
+
+        return res.sendStatus(400)
+    }
+
+    var data = req.body;
+
+    // Report to console
+    console.log( "Fields Received", data );
+
+    // =================================
+
+    // You can inspect the req and res objects using console
+    // To see what they contain
+
+    console.log ("=====> Files: ", req.files );
+    // =================================
+
+    // Read file ** Asynchronously ** from data file back to the profile page
+    fs.readFile("data.json", function readFileCallback ( err, data ) {
+        if ( err )  {
+
+            res.json({
+                err: true,
+                msg: err.msg
+            });
+            return console.log( err );
+        }
+
+        // No error, continue process
+
+        // Convert JSON string to JavaScript object using Chrome V8 processing for NODE.
+        var profileInfo = {
+            firstNameField: "",
+            lastNameField: "",
+            bioField: "",
+            photoField: ""
+        };
+
+        // Create a new object to populate HTML dynamically or as a placeholder
+        var profileFields =  profileInfo;
+
+        // Default placeholders when the page is initially loaded
+        profileFields.firstNameField =  "First Name";
+        profileFields.lastNameField =  "Last Name";
+        profileFields.bioField =  "Tell us a little about yourself!";
+
+
+        if ( data.length > 0 ) {
+            var profileData = JSON.parse(data);
+
+            profileFields.firstNameField =  profileData.firstNameField;
+            profileFields.lastNameField =  profileData.lastNameField;
+            profileFields.bioField =  profileData.bioField;
+
+            console.log("Data GOTTEN from file: ", profileData);
+        }
+
+        // Render Jade template page
+        res.render("profile-repopulate", profileFields);
+    });
+
+    //res.render( "profile-form" );
 });
 
 // GET profile page
@@ -145,27 +215,13 @@ app.post( "/settings/profile", function postProfileCb ( req, res ) {
       console.log( finalPath );
       console.log ("FILENAME: ", fileName);
 
-
-
+      // Clean up after yourself by renaming and moving files.
       fs.renameSync( filePath, finalPath);
 
 
       // Alter the data object to contain the photo path
 
       data.photoPath = "images/" + fileName;
-
-      // clean up after yourself in the tmp folder
-      fs.unlink( filePath, function clean_upCallback (err) {
-        if ( err ) {
-          res.json({
-            err: true, msg: err.msg
-          });
-
-          return console.log( err );
-        }
-        console.log('successfully deleted ', req.files.photoField.path);
-      });
-
     }
 
     // Write JSON with POST data using core node methods

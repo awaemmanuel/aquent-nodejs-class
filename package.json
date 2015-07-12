@@ -15,7 +15,8 @@
                         "connect": "*",
 	  					"multipart": "*",
 	  					"connect-multiparty": "*",
-	  					"body-parser": "*"
+	  					"body-parser": "*",
+                        "jsdom": "*"
 
 	}
 }
